@@ -1,3 +1,5 @@
+require_relative 'migrator'
+
 class Generate < Thor
   include Thor::Actions
 
@@ -16,6 +18,13 @@ class Generate < Thor
     component_folder = Dir.pwd + "/app/#{name}"
     @component_name = name
     directory('component', component_folder, component_name: name)
+  end
+
+  desc 'migration NAME', 'Creates a migration named NAME in config/migrations'
+  def migration(name)
+    output_file = Dir.pwd + "/config/migrations/#{name.underscore}.rb"
+    next_sequence_id = Volt::Migrator.new(self).latest_sequence_id + 1
+    template('migrations/migration.rb.tt', output_file, migration_name: name.camelize, next_sequence_id: next_sequence_id)
   end
 
   def self.source_root

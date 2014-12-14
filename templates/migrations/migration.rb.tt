@@ -1,0 +1,15 @@
+module Volt
+  class <%= config[:migration_name] %> < Migration
+    sequence_id <%= config[:next_sequence_id] %>
+
+    def up
+      # Access collections and models like you would in a controller
+      # Make the change you need to the database
+    end
+
+    def down
+      # Undo the change you are making to the database
+      # In case things go wrong
+    end
+  end
+end

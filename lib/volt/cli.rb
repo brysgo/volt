@@ -71,6 +71,7 @@ module Volt
 
     desc 'runner FILEPATH', 'Runs a ruby file at FILEPATH in the volt app'
     method_option :file_path, type: :string
+
     def runner(file_path)
       ENV['SERVER'] = 'true'
       require 'volt/cli/runner'
@@ -90,6 +91,16 @@ module Volt
       require 'volt/cli/new_gem'
 
       NewGem.new(self, name, options)
+    end
+
+    desc 'migrate', 'Runs migrations up'
+    method_option :rollback, type: :boolean, default: false, lazy_default: true, aliases: '-r', banner: 'Run migrations backwards. If steps are not provided rolls back one migration.'
+    method_option :steps, type: :numeric
+
+    def migrate
+      require 'volt/cli/migrator'
+
+      Migrator.new(self, options)
     end
 
     def self.source_root
